@@ -205,11 +205,7 @@ window.onload = function () {
             i * card_height +
             "px; left: " +
             j * card_width +
-            "px'><img src='./sprites/symbol_" +
-            current_array[i][j] +
-            "/symbol_" +
-            current_array[i][j] +
-            "_0.png' class='full'></div>"
+            "px'></div>"
         );
       }
     }
@@ -245,6 +241,14 @@ window.onload = function () {
         );
       }
     }
+    for(var i=0;i<3;i++){
+      for(var j=0;j<3;j++){
+        $("#card-"+i+"-"+j).prepend("<img src='./sprites/symbol_" +
+        current_array[i][j] +
+        "/symbol_" +
+        current_array[i][j] +"_0.png' class='full'>")
+      }
+    }
   }
 
   function controlpanelInitial() {
@@ -266,7 +270,7 @@ window.onload = function () {
 
   $(".card").click(async function () {
     var id = $(this).attr("id");
-    if (id.split("-").length == 3 && appearCardSetInterval == null) {
+    if (id.split("-").length == 3 && appearCardSetInterval == null && multiInterval == null) {
       $(this).attr("id", id + "-1");
       var i = id.split("-")[1];
       var j = id.split("-")[2];
@@ -324,7 +328,7 @@ window.onload = function () {
         total_ids.push(id);
       }
     });
-    if (multiInterval == null) {
+    if (multiInterval == null && appearCardSetInterval == null) {
       multiInterval = setInterval(multiOpen, 30, total_ids);
     }
   });
