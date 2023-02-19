@@ -179,6 +179,7 @@ window.onload = function () {
   var current_num = 0;
   var price = [1, 5, 10, 15, 20, 25, 30, 40, 50];
   var success_flag = false;
+  var flag=false;
   //Game object
   var Game = new Game();
   Game.initial();
@@ -280,14 +281,13 @@ window.onload = function () {
       if (current_num == 9) {
         if (success_flag == false) {
           setTimeout(noWinModal, 2000);
-        } else {
-          setTimeout(successModal, 2000);
-        }
+        } 
       }
     }
   });
 
   function noWinModal() {
+    flag=false;
     clearInterval(blurCardInterval);
     $(".card .background_square img").removeClass("show").addClass("hidden");
     $(".card .background_square img:first-child")
@@ -297,7 +297,6 @@ window.onload = function () {
     $(".modal .error").removeClass("hidden").addClass("show");
   }
 
-  function successModal() {}
 
   async function appearCard(obj) {
     appearCardSetInterval = await setInterval(appearCardEffect, 30, obj);
@@ -321,16 +320,20 @@ window.onload = function () {
     return Math.floor(Math.random() * max);
   }
   $(".start_panel").click(function () {
-    var total_ids = [];
-    $(".card").each(function () {
-      var id = $(this).attr("id");
-      if (id.split("-").length == 3) {
-        total_ids.push(id);
+    if(flag==false && multiInterval == null && appearCardSetInterval == null){
+      flag=true;
+      var total_ids = [];
+      $(".card").each(function () {
+        var id = $(this).attr("id");
+        if (id.split("-").length == 3) {
+          total_ids.push(id);
+        }
+      });
+      if (multiInterval == null && appearCardSetInterval == null) {
+        multiInterval = setInterval(multiOpen, 30, total_ids);
       }
-    });
-    if (multiInterval == null && appearCardSetInterval == null) {
-      multiInterval = setInterval(multiOpen, 30, total_ids);
     }
+  
   });
 
   function multiOpen(ids) {
@@ -497,7 +500,7 @@ window.onload = function () {
     $(".modal .success .success_img img:nth-child(" + global_k + ")")
       .removeClass("hidden")
       .addClass("show");
-    $(".modal .success .success_effect img")
+      $(".modal .success .success_effect img:nth-child(" + (global_k-1) + ")")
       .addClass("hidden")
       .removeClass("show");
     $(".modal .success .success_effect img:nth-child(" + global_k + ")")
